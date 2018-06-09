@@ -14,57 +14,38 @@ package makechangeusingmincoins;
  *
  * @author Ali
  */
-public class MakeChangeUsingMinCoins 
+public class MakeChangeUsingMinCoins
 {
-
-    public static void main(String args[]) 
+    public static void main(String args[])
     {
         int[] arr = {1,3,4};
         //Output of following case should be ====>  2
-        System.out.println(makeMinimumChange(6, arr));
+        System.out.println(minCoins(arr, 6));
     }
-    
-    public static int makeMinimumChange(int amount, int[] arr)
-    {
-        if (arr.length == 0)
-            return 0;
-            
-        int minChange = Integer.MAX_VALUE;
-        int index = arr.length-1;
-        for (int i=index; i>= 0; i--)
-        {
-            int change = makeMinimumChangeUtil(amount, arr, i, 0);
-            minChange = Math.min(minChange, change);
+
+    public static int minCoins(int[] coins, int sum){
+      if (sum == 0) {
+        return 0;
+      }
+
+      int[] memo = new int[sum+1];
+      for (int i=0; i<sum+1; i++) {
+        memo[i] = Integer.MAX_VALUE;
+      }
+
+      memo[0] = 0;
+      for (int i=1; i<sum+1; i++){
+        for (int j=0; j<coins.length; j++){
+          if (coins[j] <= i) {
+            int sub_res = memo[i - coins[j]];
+            if (sub_res != Integer.MAX_VALUE
+                && sub_res + 1 < memo[i])
+              memo[i] = sub_res + 1;
+
+          }
         }
-        
-        return minChange;
+      }
+
+      return memo[sum];
     }
-    
-    private static int makeMinimumChangeUtil(int amount, int[] arr, int index, int coinCount)
-    {
-        if (amount == 0 || index<0)
-        {
-            return coinCount;
-        }
-        
-        int leftOver = amount - arr[index];
-        
-        if (leftOver == 0)
-        {
-            return ++coinCount;
-        }
-        
-        else if (leftOver < 0)
-        {
-            coinCount = makeMinimumChangeUtil(amount, arr, --index, coinCount);
-        }
-        else
-        {
-            ++coinCount;
-            coinCount = makeMinimumChangeUtil(leftOver, arr, index, coinCount);
-        }
-        
-        return coinCount;
-    }
-    
 }
