@@ -22,10 +22,9 @@ not possible.
 
 7. Thus we will have a nested loop starting from 0 to end of coins array.
 
-8. In this loop we are going to check if the coin value is less than or equal to i value then we will take the previously calculated value from memo table 
-int sub_res = memo[i - coins[j]];
+8. In this loop we are going to check if the coin value is less than or equal to i value then we will take the previously calculated value from memo table <br />
+int sub_res = memo[i - coins[j]];<br />
 
-9. Lastly we will do this
-if (sub_res != Integer.MAX_VALUE
-	&& sub_res + 1 < memo[i])
-	  memo[i] = sub_res + 1;
+9. Lastly we will do this<br /><br />
+if (sub_res != Integer.MAX_VALUE && sub_res + 1 < memo[i])<br />
+	  memo[i] = sub_res + 1;<br />
