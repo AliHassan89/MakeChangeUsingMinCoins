@@ -23,29 +23,35 @@ public class MakeChangeUsingMinCoins
         System.out.println(minCoins(arr, 6));
     }
 
-    public static int minCoins(int[] coins, int sum){
-      if (sum == 0) {
-        return 0;
-      }
-
-      int[] memo = new int[sum+1];
-      for (int i=0; i<sum+1; i++) {
-        memo[i] = Integer.MAX_VALUE;
-      }
-
-      memo[0] = 0;
-      for (int i=1; i<sum+1; i++){
-        for (int j=0; j<coins.length; j++){
-          if (coins[j] <= i) {
-            int sub_res = memo[i - coins[j]];
-            if (sub_res != Integer.MAX_VALUE
-                && sub_res + 1 < memo[i])
-              memo[i] = sub_res + 1;
-
-          }
+    public static int coinChange(int[] coins, int amount) {
+        Map<Integer, Integer> map = new HashMap<>();
+        int coinCount = coinChangeHelper(coins, amount, map);
+        return coinCount == Integer.MAX_VALUE ? -1 : coinCount;
+    }
+    
+    private static int coinChangeHelper(int[] coins, int amount, Map<Integer, Integer> map)
+    {
+        if (map.get(amount) != null)
+        {
+            return map.get(amount);
         }
-      }
+        if (amount == 0)
+        {
+            return 0;
+        }
+        int coinCount = Integer.MAX_VALUE;
 
-      return memo[sum];
+        for (int coin : coins)
+        {
+            if (coin <= amount)
+            {
+                int tempCoinCount = coinChangeHelper(coins, amount - coin, map);
+                if (tempCoinCount != Integer.MAX_VALUE && tempCoinCount + 1 < coinCount) {
+                    coinCount = tempCoinCount + 1;
+                }
+            }
+        }
+        map.put(amount, coinCount);
+        return map.get(amount);
     }
 }
